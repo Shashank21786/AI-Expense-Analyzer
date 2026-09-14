@@ -136,10 +136,7 @@ def ingest_transaction(
         source_app=transaction_data.source_app,
         source="notification",
         status=transaction_status,
-        raw_text=transaction_data.raw_text,
-        source_app=transaction_data.source_app,
         category_source=decision.category_source,
-        fingerprint=transaction_data.fingerprint,
     )
 
     db.add(transaction)
