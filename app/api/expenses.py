@@ -128,7 +128,6 @@ def ingest_transaction(
         amount=transaction_data.amount,
         merchant=merchant,
         category=category,
-        category_source=category_source,
         confidence=confidence,
         fingerprint=transaction_data.fingerprint,
         transaction_date=transaction_data.transaction_date.date(),
