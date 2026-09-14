@@ -1,0 +1,118 @@
+# docker-compose.yml
+# ---------------------------------------------------------
+# This file tells Docker how to create and run the services
+# required by our project.
+#
+# In our case, we need ONE service:
+# PostgreSQL database
+# ---------------------------------------------------------
+
+services:
+
+  # -------------------------------------------------------
+  # Service name: postgres
+  #
+  # This is the name Docker Compose will use to identify
+  # our PostgreSQL service.
+  # -------------------------------------------------------
+  postgres:
+
+    # -----------------------------------------------------
+    # Docker image to use.
+    #
+    # postgres:16 means:
+    # "Create the PostgreSQL container using PostgreSQL
+    # version 16."
+    #
+    # Docker will download this image from Docker Hub
+    # if it is not already available on our computer.
+    # -----------------------------------------------------
+    image: postgres:16
+
+    # -----------------------------------------------------
+    # Name we want to give our running container.
+    #
+    # Instead of Docker generating a random container name,
+    # our container will be called:
+    #
+    # ai-expense-postgres
+    # -----------------------------------------------------
+    container_name: ai-expense-postgres
+
+    # -----------------------------------------------------
+    # Restart policy.
+    #
+    # unless-stopped means:
+    # - If the container crashes → Docker tries to restart it.
+    # - If Docker restarts → Docker starts this container again.
+    # - If WE explicitly stop the container → Docker won't
+    #   automatically start it again.
+    # -----------------------------------------------------
+    restart: unless-stopped
+
+    # -----------------------------------------------------
+    # Environment variables.
+    #
+    # These values are used by PostgreSQL when the database
+    # container is created for the first time.
+    # -----------------------------------------------------
+    environment:
+
+      # Name of the PostgreSQL database.
+      #
+      # Our application will connect to this database.
+      POSTGRES_DB: expense_db
+
+      # Username that PostgreSQL will create.
+      POSTGRES_USER: expense_user
+
+      # Password for the PostgreSQL user.
+      #
+      # NOTE:
+      # For a real production application, don't keep
+      # passwords directly in this file.
+      # Use a .env file or secret management instead.
+      POSTGRES_PASSWORD: expense_password
+
+    # -----------------------------------------------------
+    # Port mapping.
+    #
+    # PostgreSQL normally listens on port 5432.
+    #
+    # "5432:5432" means:
+    #
+    # Windows/Host machine port 5432
+    #          ↓
+    # Docker container port 5432
+    #
+    # Therefore our Python application running on the
+    # computer can connect to PostgreSQL using:
+    #
+    # localhost:5432
+    # -----------------------------------------------------
+    ports:
+      - "5432:5432"
+
+    # -----------------------------------------------------
+    # Volumes.
+    #
+    # PostgreSQL stores database data inside the container.
+    #
+    # Without a volume:
+    #     Delete container → potentially lose database data
+    #
+    # With a volume:
+    #     Container can be removed/recreated while the
+    #     database data remains stored in Docker's volume.
+    # -----------------------------------------------------
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# ---------------------------------------------------------
+# Define the Docker volume used above.
+#
+# postgres_data is a persistent storage area managed by
+# Docker.
+# ---------------------------------------------------------
+volumes:
+  postgres_data:
