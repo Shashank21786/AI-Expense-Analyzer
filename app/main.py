@@ -344,6 +344,5 @@ def health_check():
 
 
 app.include_router(
-    expenses_router,
-    prefix="/expenses",
+    expenses_router
 )
